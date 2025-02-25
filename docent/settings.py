@@ -44,6 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # 프로젝트 앱
+    'accounts',
+    'artworks',
+    'museums',
+    'recommendations',
 ]
 
 MIDDLEWARE = [
@@ -147,9 +153,9 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': '도슨트 서비스 API',
+    'TITLE': '아트너 API',
     # 'DESCRIPTION': 'API documentation for 식기한 냉장고',
-    'DESCRIPTION': 'API documentation for 도슨트 서비스',
+    'DESCRIPTION': 'API documentation for Artner',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,  # Schema를 API 엔드포인트로 제공하지 않음
     'SWAGGER_UI_SETTINGS': {
@@ -194,3 +200,29 @@ CORS_ALLOWED_ORIGINS = [
     origin.strip() for origin in config('CORS_ALLOWED_ORIGINS', '').split(',')
     if origin.strip()
 ]
+
+# 커스텀 유저 모델 설정
+AUTH_USER_MODEL = 'accounts.User'
+
+# 미디어 파일 설정
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# 소셜 로그인 설정
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# JWT 설정
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
